@@ -1,0 +1,27 @@
+# Terraform state
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Ignore zipped function packages (if created)
+functions/**/*.zip
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Mac/Windows system files
+.DS_Store
+Thumbs.db
+
+# Logs or temp files (optional)
+*.log
+*.tmp
+
+# Local environment or secrets (if you ever add)
+.env

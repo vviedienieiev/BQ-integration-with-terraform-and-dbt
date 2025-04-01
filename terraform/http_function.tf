@@ -3,7 +3,7 @@ resource "google_storage_bucket" "functions_bucket" {
   location = "US"
 }
 
-data "archive_file" "function_src" {
+data "archive_file" "function_archive" {
   for_each = { for f in var.http_functions: f.name => f}
 
   type        = "zip"
@@ -14,7 +14,7 @@ data "archive_file" "function_src" {
 resource "google_storage_bucket_object" "function_sources" {
   for_each = { for f in var.http_functions : f.name => f }
 
-  name   = "${each.value.name}-${data.archive_file.function_src[each.key].output_md5}.zip"
+  name   = "${each.value.name}-${data.archive_file.function_archive[each.key].output_md5}.zip"
   bucket = google_storage_bucket.functions_bucket.name
   source = "${path.module}/.terraform/tmp/${each.key}.zip"
 }
@@ -23,7 +23,7 @@ resource "google_cloudfunctions2_function" "http_functions" {
   for_each = { for f in var.http_functions : f.name => f }
 
   name        = each.value.name
-  location    = "us-central1"
+  location    = var.region
   description = each.value.description
 
   build_config {
@@ -32,7 +32,7 @@ resource "google_cloudfunctions2_function" "http_functions" {
     source {
       storage_source {
         bucket = google_storage_bucket.functions_bucket.name
-        object = "${each.value.name}-${data.archive_file.function_src[each.key].output_md5}.zip"
+        object = "${each.value.name}-${data.archive_file.function_archive[each.key].output_md5}.zip"
       }
     }
   }

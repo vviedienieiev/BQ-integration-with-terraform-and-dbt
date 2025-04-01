@@ -13,7 +13,6 @@ variable "zone" {
   default = "us-central1-c"
 }
 
-
 variable "http_functions" {
   type = list(object({
     name         = string

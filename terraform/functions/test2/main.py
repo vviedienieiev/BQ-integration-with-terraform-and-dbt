@@ -1,3 +1,2 @@
 def main(event):
-    print("hello world2")
-    return "Hi"
+    return "Again hello world!"
